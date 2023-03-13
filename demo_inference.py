@@ -1,5 +1,9 @@
-image_path = './demo/demo.jpg'
-sentence = 'the most handsome guy'
+#code modified to take inmput image name, image assumed to be in jpg format
+#code also now takes input sentence
+#output file name is now derived frmo image name
+img_name = input('Enter Image name:')
+image_path = f'./demo/{img_name}.jpg'
+sentence = input('Enter sentence:')
 weights = './checkpoints/refcoco.pth'
 device = 'cuda:0'
 
@@ -111,7 +115,7 @@ visualization = Image.fromarray(visualization)
 # show the visualization
 #visualization.show()
 # Save the visualization
-visualization.save('./demo/demo_result.jpg')
+visualization.save(f'./demo/{img_name}_demo_result.jpg')
 
 
 

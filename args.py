@@ -12,7 +12,7 @@ def get_parser():
     parser.add_argument('--ddp_trained_weights', action='store_true',
                         help='Only needs specified when testing,'
                              'whether the weights to be loaded are from a DDP-trained model')
-    parser.add_argument('--device', default='cuda:0', help='device')  # only used when testing on a single machine
+    parser.add_argument('--device', default='cuda:1', help='device')  # only used when testing on a single machine
     parser.add_argument('--epochs', default=40, type=int, metavar='N', help='number of total epochs to run')
     parser.add_argument('--fusion_drop', default=0.0, type=float, help='dropout rate for PWAMs')
     parser.add_argument('--img_size', default=480, type=int, help='input image size')
@@ -29,7 +29,7 @@ def get_parser():
     parser.add_argument('--pretrained_swin_weights', default='',
                         help='path to pre-trained Swin backbone weights')
     parser.add_argument('--print-freq', default=10, type=int, help='print frequency')
-    parser.add_argument('--refer_data_root', default='./refer/data/', help='REFER dataset root directory')
+    parser.add_argument('--refer_data_root', default='../data/', help='REFER dataset root directory')
     parser.add_argument('--resume', default='', help='resume from checkpoint')
     parser.add_argument('--split', default='test', help='only used when testing')
     parser.add_argument('--splitBy', default='unc', help='change to umd or google when the dataset is G-Ref (RefCOCOg)')
