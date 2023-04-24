@@ -1,0 +1,161 @@
+RANK and WORLD_SIZE in environment: 2/4
+RANK and WORLD_SIZE in environment: 3/4
+RANK and WORLD_SIZE in environment: 0/4
+RANK and WORLD_SIZE in environment: 1/4
+Image size: 480
+loading dataset refcoco into memory...
+creating index...
+index created.
+DONE (t=6.46s)
+loading dataset refcoco into memory...
+creating index...
+index created.
+DONE (t=6.35s)
+local rank 0 / global rank 0 successfully built train dataset.
+lavt
+Window size 12!
+Initializing Multi-modal Swin Transformer weights from ./pretrained_weights/swin_base_patch4_window12_384_22k.pth
+torch.Size([8, 480, 480])
+Traceback (most recent call last):
+  File "train.py", line 324, in <module>
+    main(args)
+  File "train.py", line 290, in main
+    iterations, bert_model)
+  File "train.py", line 153, in train_one_epoch
+    output = model(image, embedding, l_mask=attentions)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/parallel/distributed.py", line 619, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/_utils.py", line 17, in forward
+    features = self.backbone(x, l_feats, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 478, in forward
+    x_out, H, W, x, Wh, Ww = layer(x, Wh, Ww, l, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 594, in forward
+    x = blk(x, attn_mask)  # output of a Block has shape (B, H*W, dim)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 223, in forward
+    attn_windows = self.attn(x_windows, mask=attn_mask)  # nW*B, window_size*window_size, C
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 120, in forward
+    qkv = self.qkv(x).reshape(B_, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 93, in forward
+Traceback (most recent call last):
+  File "train.py", line 324, in <module>
+    main(args)
+  File "train.py", line 290, in main
+    iterations, bert_model)
+  File "train.py", line 153, in train_one_epoch
+    output = model(image, embedding, l_mask=attentions)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/parallel/distributed.py", line 619, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/_utils.py", line 17, in forward
+    features = self.backbone(x, l_feats, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 478, in forward
+    x_out, H, W, x, Wh, Ww = layer(x, Wh, Ww, l, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 599, in forward
+    x = x + (self.res_gate(x_residual) * x_residual)
+RuntimeError: CUDA out of memory. Tried to allocate 58.00 MiB (GPU 0; 10.92 GiB total capacity; 5.67 GiB already allocated; 10.38 MiB free; 5.78 GiB reserved in total by PyTorch)
+    return F.linear(input, self.weight, self.bias)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/functional.py", line 1692, in linear
+    output = input.matmul(weight.t())
+RuntimeError: CUDA out of memory. Tried to allocate 62.00 MiB (GPU 1; 10.92 GiB total capacity; 9.95 GiB already allocated; 11.38 MiB free; 10.23 GiB reserved in total by PyTorch)
+Traceback (most recent call last):
+  File "train.py", line 324, in <module>
+    main(args)
+  File "train.py", line 290, in main
+    iterations, bert_model)
+  File "train.py", line 153, in train_one_epoch
+    output = model(image, embedding, l_mask=attentions)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/parallel/distributed.py", line 619, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/_utils.py", line 17, in forward
+    features = self.backbone(x, l_feats, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 478, in forward
+    x_out, H, W, x, Wh, Ww = layer(x, Wh, Ww, l, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 594, in forward
+    x = blk(x, attn_mask)  # output of a Block has shape (B, H*W, dim)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 242, in forward
+    x = x + self.drop_path(self.mlp(self.norm2(x)))
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 25, in forward
+    x = self.act(x)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/activation.py", line 627, in forward
+    return F.gelu(input)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/functional.py", line 1383, in gelu
+    return torch._C._nn.gelu(input)
+RuntimeError: CUDA out of memory. Tried to allocate 58.00 MiB (GPU 3; 10.92 GiB total capacity; 9.44 GiB already allocated; 54.38 MiB free; 9.71 GiB reserved in total by PyTorch)
+Traceback (most recent call last):
+  File "train.py", line 324, in <module>
+    main(args)
+  File "train.py", line 290, in main
+    iterations, bert_model)
+  File "train.py", line 153, in train_one_epoch
+    output = model(image, embedding, l_mask=attentions)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/parallel/distributed.py", line 619, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/_utils.py", line 17, in forward
+    features = self.backbone(x, l_feats, l_mask)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 464, in forward
+    x = self.patch_embed(x)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/ACV/LAVT-RIS/lib/backbone.py", line 327, in forward
+    x = self.norm(x)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/modules/normalization.py", line 170, in forward
+    input, self.normalized_shape, self.weight, self.bias, self.eps)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/nn/functional.py", line 2095, in layer_norm
+    torch.backends.cudnn.enabled)
+RuntimeError: CUDA out of memory. Tried to allocate 58.00 MiB (GPU 2; 10.92 GiB total capacity; 1.95 GiB already allocated; 52.38 MiB free; 1.97 GiB reserved in total by PyTorch)
+Traceback (most recent call last):
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/distributed/launch.py", line 260, in <module>
+    main()
+  File "/home/pradeep/anaconda3/envs/lavt/lib/python3.7/site-packages/torch/distributed/launch.py", line 256, in main
+    cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/pradeep/anaconda3/envs/lavt/bin/python', '-u', 'train.py', '--local_rank=3', '--model', 'lavt', '--dataset', 'refcoco', '--model_id', 'refcoco', '--batch-size', '8', '--lr', '0.00005', '--wd', '1e-2', '--swin_type', 'base', '--pretrained_swin_weights', './pretrained_weights/swin_base_patch4_window12_384_22k.pth', '--epochs', '40', '--img_size', '480']' returned non-zero exit status 1.
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************

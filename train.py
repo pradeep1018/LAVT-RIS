@@ -59,10 +59,24 @@ def get_transform(args):
     return T.Compose(transforms)
 
 
-def criterion(input, target):
+def cross_entropy(input, target):
     weight = torch.FloatTensor([0.9, 1.1]).cuda()
     return nn.functional.cross_entropy(input, target, weight=weight)
 
+def dice(input, target, smooth=1):
+    input = F.sigmoid(input)       
+        
+    #flatten label and prediction tensors
+    input = input.view(-1)
+    target = target.view(-1)
+    
+    intersection = (input * target).sum()                            
+    dice = (2.*intersection + smooth)/(input.sum() + target.sum() + smooth)  
+    
+    return 1 - dice
+
+def lts(input, target):
+    pass
 
 def evaluate(model, data_loader, bert_model):
     model.eval()
@@ -139,6 +153,8 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, epoc
                                                target.cuda(non_blocking=True),\
                                                sentences.cuda(non_blocking=True),\
                                                attentions.cuda(non_blocking=True)
+        
+        print(target.shape)
 
         sentences = sentences.squeeze(1)
         attentions = attentions.squeeze(1)
@@ -263,6 +279,9 @@ def main(args):
     # learning rate scheduler
     lr_scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer,
                                                      lambda x: (1 - x / (len(data_loader) * args.epochs)) ** 0.9)
+
+    # loss function
+    criterion = args.lossfn
 
     # housekeeping
     start_time = time.time()

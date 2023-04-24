@@ -1,11 +1,11 @@
-#code modified to take inmput image name, image assumed to be in jpg format
+#code modified to take input image name, image assumed to be in jpg format
 #code also now takes input sentence
-#output file name is now derived frmo image name
+#output file name is now derived from image name
 img_name = input('Enter Image name:')
-image_path = f'./demo/{img_name}.jpg'
+image_path = f'./demo/{img_name}'
 sentence = input('Enter sentence:')
 weights = './checkpoints/refcoco.pth'
-device = 'cuda:0'
+device = 'cuda:4'
 
 # pre-process the input image
 from PIL import Image
@@ -115,7 +115,7 @@ visualization = Image.fromarray(visualization)
 # show the visualization
 #visualization.show()
 # Save the visualization
-visualization.save(f'./demo/{img_name}_demo_result.jpg')
+visualization.save(f'./demo/{img_name}_{sentence}_demo_result.jpg')
 
 
 

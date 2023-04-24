@@ -59,7 +59,9 @@ def evaluate(model, data_loader, bert_model, device):
                     output = model(image, sentences[:, :, j], l_mask=attentions[:, :, j])
 
                 output = output.cpu()
+                print(output.shape)
                 output_mask = output.argmax(1).data.numpy()
+                print(output_mask.shape)
                 I, U = computeIoU(output_mask, target)
                 if U == 0:
                     this_iou = 0.0
