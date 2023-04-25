@@ -1,7 +1,7 @@
 # LAVT: Language-Aware Vision Transformer for Referring Image Segmentation
 
 ```shell
-CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node 4 --master_port 12345 train.py --model lavt --dataset refcoco --model_id refcoco --batch-size 8 --lr 0.00005 --wd 1e-2 --swin_type base --pretrained_swin_weights ./pretrained_weights/swin_base_patch4_window12_384_22k.pth --epochs 40 --img_size 480 2>&1 | tee ./models/refcoco/output
+CUDA_VISIBLE_DEVICES=2,3,4,5 python -m torch.distributed.launch --nproc_per_node 4 --master_port 12345 train.py --model lavt_one --dataset refcoco --model_id refcoco --batch-size 32 --lr 0.00005 --wd 1e-2 --swin_type tiny --pretrained_swin_weights ./pretrained_weights/swin_tiny_patch4_window7_224.pth --epochs 20 --lossfn dice --img_size 224 2>&1 | tee ./models/refcoco/output
 ```
 
 Welcome to the official repository for the method presented in
