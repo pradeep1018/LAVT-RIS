@@ -5,6 +5,7 @@ import time
 import torch
 import torch.utils.data
 from torch import nn
+from torch.autograd import Variable
 
 from functools import reduce
 import operator
@@ -22,7 +23,6 @@ import torch.nn.functional as F
 import gc
 from collections import OrderedDict
 
-
 def get_dataset(image_set, transform, args):
     from data.dataset_refer_bert import ReferDataset
     ds = ReferDataset(args,
@@ -37,6 +37,8 @@ def get_dataset(image_set, transform, args):
 
 # IoU calculation for validation
 def IoU(pred, gt):
+    print(pred.shape)
+    print(gt.shape)
     pred = pred.argmax(1)
 
     intersection = torch.sum(torch.mul(pred, gt))
@@ -64,16 +66,27 @@ def cross_entropy(input, target):
     return nn.functional.cross_entropy(input, target, weight=weight)
 
 def dice(input, target, smooth=1):
-    input = F.sigmoid(input)       
+    input = input.argmax(1)     
         
     #flatten label and prediction tensors
     input = input.view(-1)
     target = target.view(-1)
     
+    """
+    intersection = torch.sum(torch.mul(input, target))                            
+    #dice = (2.*intersection + smooth)/(input.sum() + target.sum() + smooth)  
+    dice = torch.div(torch.add(torch.mul(2.,intersection),smooth),torch.add(torch.add(input.sum(),target.sum()),smooth))
+    
+    return torch.sub(1.,dice)
+    """
+
     intersection = (input * target).sum()                            
     dice = (2.*intersection + smooth)/(input.sum() + target.sum() + smooth)  
+    dice_loss = 1- dice
+    dice_loss = Variable(dice_loss, requires_grad=True)
     
-    return 1 - dice
+    return dice_loss
+
 
 def lts(input, target):
     pass
@@ -153,8 +166,6 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, epoc
                                                target.cuda(non_blocking=True),\
                                                sentences.cuda(non_blocking=True),\
                                                attentions.cuda(non_blocking=True)
-        
-        print(target.shape)
 
         sentences = sentences.squeeze(1)
         attentions = attentions.squeeze(1)
@@ -168,6 +179,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, epoc
             output = model(image, sentences, l_mask=attentions)
 
         loss = criterion(output, target)
+        print(loss)
         optimizer.zero_grad()  # set_to_none=True is only available in pytorch 1.6+
         loss.backward()
         optimizer.step()
@@ -185,6 +197,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, epoc
         gc.collect()
         torch.cuda.empty_cache()
         torch.cuda.synchronize()
+        break
 
 
 def main(args):
@@ -281,7 +294,10 @@ def main(args):
                                                      lambda x: (1 - x / (len(data_loader) * args.epochs)) ** 0.9)
 
     # loss function
-    criterion = args.lossfn
+    if args.lossfn=='cross_entropy':
+        criterion = cross_entropy
+    if args.lossfn=='dice':
+        criterion = dice
 
     # housekeeping
     start_time = time.time()

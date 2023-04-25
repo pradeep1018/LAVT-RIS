@@ -8,7 +8,6 @@ def get_parser():
     parser.add_argument('-b', '--batch-size', default=8, type=int)
     parser.add_argument('--bert_tokenizer', default='bert-base-uncased', help='BERT tokenizer')
     parser.add_argument('--ck_bert', default='bert-base-uncased', help='pre-trained BERT weights')
-    parser.add_argument('--lossfn', default=cross_entropy, help='loss function')
     parser.add_argument('--dataset', default='refcoco', help='refcoco, refcoco+, or refcocog')
     parser.add_argument('--ddp_trained_weights', action='store_true',
                         help='Only needs specified when testing,'
@@ -18,6 +17,7 @@ def get_parser():
     parser.add_argument('--fusion_drop', default=0.0, type=float, help='dropout rate for PWAMs')
     parser.add_argument('--img_size', default=480, type=int, help='input image size')
     parser.add_argument("--local_rank", type=int, help='local rank for DistributedDataParallel')
+    parser.add_argument('--lossfn', default='cross_entropy', help='loss function')
     parser.add_argument('--lr', default=0.00005, type=float, help='the initial learning rate')
     parser.add_argument('--mha', default='', help='If specified, should be in the format of a-b-c-d, e.g., 4-4-4-4,'
                                                   'where a, b, c, and d refer to the numbers of heads in stage-1,'
