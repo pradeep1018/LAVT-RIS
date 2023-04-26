@@ -37,8 +37,6 @@ def get_dataset(image_set, transform, args):
 
 # IoU calculation for validation
 def IoU(pred, gt):
-    print(pred.shape)
-    print(gt.shape)
     pred = pred.argmax(1)
 
     intersection = torch.sum(torch.mul(pred, gt))
@@ -65,9 +63,9 @@ def cross_entropy(input, target):
     weight = torch.FloatTensor([0.9, 1.1]).cuda()
     return nn.functional.cross_entropy(input, target, weight=weight)
 
-def dice(input, target, smooth=1):
-    input = input.argmax(1)     
-        
+def dice(input, target, smooth=1) -> torch.Tensor:
+    input = input.argmax(1)
+    
     #flatten label and prediction tensors
     input = input.view(-1)
     target = target.view(-1)
@@ -83,7 +81,7 @@ def dice(input, target, smooth=1):
     intersection = (input * target).sum()                            
     dice = (2.*intersection + smooth)/(input.sum() + target.sum() + smooth)  
     dice_loss = 1- dice
-    dice_loss = Variable(dice_loss, requires_grad=True)
+    #dice_loss = Variable(dice_loss, requires_grad=True)
     
     return dice_loss
 
@@ -179,7 +177,6 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, epoc
             output = model(image, sentences, l_mask=attentions)
 
         loss = criterion(output, target)
-        print(loss)
         optimizer.zero_grad()  # set_to_none=True is only available in pytorch 1.6+
         loss.backward()
         optimizer.step()
@@ -197,7 +194,6 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, epoc
         gc.collect()
         torch.cuda.empty_cache()
         torch.cuda.synchronize()
-        break
 
 
 def main(args):
@@ -334,7 +330,7 @@ def main(args):
                                 'lr_scheduler': lr_scheduler.state_dict()}
 
             utils.save_on_master(dict_to_save, os.path.join(args.output_dir,
-                                                            'model_best_{}.pth'.format(args.model_id)))
+                                                            'model_{}.pth'.format(args.lossfn)))
             best_oIoU = overallIoU
 
     # summarize
